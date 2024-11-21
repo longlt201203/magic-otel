@@ -7,7 +7,7 @@
     "test": "node dist/index.js",
     "build": "rimraf dist && tsc"
   },
-  "author": "",
+  "author": "Le Thanh Long [longlt201203@gmail.com]",
   "license": "MIT",
   "description": "",
   "devDependencies": {
@@ -22,5 +22,13 @@
     "@opentelemetry/sdk-metrics": "^1.28.0",
     "@opentelemetry/sdk-node": "^0.55.0",
     "@opentelemetry/sdk-trace-base": "^1.28.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/longlt201203/magic-otel.git"
+  },
+  "bugs": {
+    "url": "https://github.com/longlt201203/magic-otel/issues"
+  },
+  "homepage": "https://github.com/longlt201203/magic-otel#readme"
 }
