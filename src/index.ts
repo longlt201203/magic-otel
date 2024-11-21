@@ -28,6 +28,7 @@ export function Tracing(): MethodDecorator {
     return (target, propertyKey, descriptor: PropertyDescriptor) => {
         const className = target.constructor.name;
         const tracer = trace.getTracer(`${className}.${propertyKey.toString()}`);
+        console.log(`${className}.${propertyKey.toString()}`)
         const originalMethod = descriptor.value;
         descriptor.value = function (...args: any[]) {
             const span = tracer.startSpan(propertyKey.toString());
@@ -64,6 +65,7 @@ export function ClassTracing(): ClassDecorator {
             const descriptor = Object.getOwnPropertyDescriptor(target.prototype, propertyKey);
             if (descriptor && typeof descriptor.value === 'function') {
                 const tracer = trace.getTracer(`${className}.${propertyKey}`);
+                console.log(`${className}.${propertyKey}`)
                 const originalMethod = descriptor.value;
                 descriptor.value = function (...args: any[]) {
                     const span = tracer.startSpan(propertyKey);
