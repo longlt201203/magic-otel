@@ -2,7 +2,7 @@ import { MetricReader } from "@opentelemetry/sdk-metrics";
 import { SpanExporter } from "@opentelemetry/sdk-trace-base";
 import { NodeSDK } from "@opentelemetry/sdk-node";
 import { Instrumentation } from "@opentelemetry/instrumentation"
-import { getNodeAutoInstrumentations } from "@opentelemetry/auto-instrumentations-node";
+import { getNodeAutoInstrumentations, InstrumentationConfigMap } from "@opentelemetry/auto-instrumentations-node";
 import { trace } from "@opentelemetry/api";
 
 export interface RegisterOpentelemetryParams {
@@ -10,6 +10,7 @@ export interface RegisterOpentelemetryParams {
     metricReader?: MetricReader;
     traceExporter?: SpanExporter;
     instrumentations?: Instrumentation[];
+    autoInstrumentations?: InstrumentationConfigMap;
 }
 
 export function registerOpentelemetry(params?: RegisterOpentelemetryParams) {
@@ -17,7 +18,7 @@ export function registerOpentelemetry(params?: RegisterOpentelemetryParams) {
         serviceName: params?.serviceName,
         metricReader: params?.metricReader,
         traceExporter: params?.traceExporter,
-        instrumentations: [getNodeAutoInstrumentations(), ...(params?.instrumentations ? params.instrumentations : [])],
+        instrumentations: [getNodeAutoInstrumentations(params?.autoInstrumentations), ...(params?.instrumentations ? params.instrumentations : [])],
     })
 
     otel.start();
