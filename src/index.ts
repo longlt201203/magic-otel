@@ -27,11 +27,10 @@ export function registerOpentelemetry(params?: RegisterOpentelemetryParams) {
 export function Tracing(): MethodDecorator {
     return (target, propertyKey, descriptor: PropertyDescriptor) => {
         const className = target.constructor.name;
-        const tracer = trace.getTracer(`${className}.${propertyKey.toString()}`);
-        console.log(`${className}.${propertyKey.toString()}`)
+        const tracer = trace.getTracer(className);
         const originalMethod = descriptor.value;
         descriptor.value = function (...args: any[]) {
-            const span = tracer.startSpan(propertyKey.toString());
+            const span = tracer.startSpan(`${className}.${propertyKey.toString()}`);
             try {
                 const result = originalMethod.apply(this, args);
                 if (result instanceof Promise) {
@@ -61,14 +60,13 @@ export function Tracing(): MethodDecorator {
 export function ClassTracing(): ClassDecorator {
     return (target) => {
         const className = target.name;
+        const tracer = trace.getTracer(className);
         Object.getOwnPropertyNames(target.prototype).forEach((propertyKey) => {
             const descriptor = Object.getOwnPropertyDescriptor(target.prototype, propertyKey);
             if (descriptor && typeof descriptor.value === 'function') {
-                const tracer = trace.getTracer(`${className}.${propertyKey}`);
-                console.log(`${className}.${propertyKey}`)
                 const originalMethod = descriptor.value;
                 descriptor.value = function (...args: any[]) {
-                    const span = tracer.startSpan(propertyKey);
+                    const span = tracer.startSpan(`${className}.${propertyKey}`);
                     try {
                         const result = originalMethod.apply(this, args);
                         if (result instanceof Promise) {
