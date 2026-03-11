@@ -1,0 +1,30 @@
+name: CI Event
+on:
+  push:
+    branches:
+      - release
+
+  workflow_dispatch:
+
+env:
+  REPO_ID: magic-otel
+  REPO_OWNER: longlt201203
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    env:
+      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+    steps:
+      - name: Checkout to repo
+        uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: "22"
+      - name: Install dependencies
+        run: npm install
+      - name: Build
+        run: npm run build
+      - name: Publish
+        run: npm publish --access public
